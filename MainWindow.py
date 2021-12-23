@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import *
 from ActionSelection import ActionSelection
-
+from KeyPressAction import KeyPressEditWindow
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -18,12 +18,20 @@ class MainWindow(QWidget):
         buttonBox.addWidget(runButton)
         buttonBox.addWidget(addButton)
 
+        self.__stopCommand = 'Escape'
+        self.__stopLabel = QLabel('Stop command: ' + self.__stopCommand)
+        stopEditButton = QPushButton("Edit")
+        stopEditButton.clicked.connect(self.change_stop_key)
+        stopBox = QHBoxLayout()
+        stopBox.addWidget(self.__stopLabel)
+        stopBox.addWidget(stopEditButton)
         self.__instructionBox = QVBoxLayout()
 
         mainBox = QVBoxLayout()
 
         mainBox.addLayout(self.__instructionBox)
         mainBox.addLayout(buttonBox)
+        mainBox.addLayout(stopBox)
 
         self.setLayout(mainBox)
 
@@ -85,3 +93,14 @@ class MainWindow(QWidget):
 
     def run(self):
         pass
+
+    def change_stop_key(self):
+        self.__escapeEditWindow = KeyPressEditWindow(self) #Uses this window because it is the same
+        self.__escapeEditWindow.show()
+
+    def set_key(self, escapeKey): #Made to match function from KeyPressAction
+        self.__stopCommand = escapeKey
+        self.__stopLabel.setText('Stop command: ' + self.__stopCommand)
+
+
+

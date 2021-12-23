@@ -15,7 +15,6 @@ class Instruction(QHBoxLayout):
         self.__deleteButton.clicked.connect(self.delete)
         self.addWidget(self.__deleteButton)
 
-
         self.__titleLabel = QLabel(title)
         self.addWidget(self.__titleLabel)
         self.__title = title
@@ -24,7 +23,6 @@ class Instruction(QHBoxLayout):
         self.__upButton.clicked.connect(self.shift_up)
         self.__downButton = QPushButton("▼")
         self.__downButton.clicked.connect(self.shift_down)
-
 
         buttonBox = QVBoxLayout()
         buttonBox.addWidget(self.__upButton)
