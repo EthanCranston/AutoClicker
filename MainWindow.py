@@ -29,8 +29,8 @@ class MainWindow(QWidget):
         buttonBox.addWidget(self.__startStopButton)
         buttonBox.addWidget(addButton)
 
-        self.__stopCommand = 'Escape'
-        self.__stopLabel = QLabel('Start/Stop Command: ' + self.__stopCommand)
+        self.__stopCommand = [Qt.Key.Key_Escape, Qt.KeyboardModifier.NoModifier]
+        self.__stopLabel = QLabel('Start/Stop Command: Escape')
         self.__stopLabel.setFont(mainFont)
         self.__stopLabel.setStyleSheet(transparentSS)
         stopEditButton = QPushButton("Edit")
@@ -61,6 +61,11 @@ class MainWindow(QWidget):
 
         self.update_elements()
         self.show()
+
+    def keyPressEvent(self, event): #For start/stop key
+        keyPressed = [event.key(), event.modifiers()]
+        if self.__stopCommand == keyPressed:
+            self.start_stop()
 
 
     def update_head(self):
@@ -134,8 +139,9 @@ class MainWindow(QWidget):
         self.__escapeEditWindow.show()
 
     def set_key(self, escapeKey): #Made to match function from KeyPressAction
-        self.__stopCommand = escapeKey
-        self.__stopLabel.setText('Stop command: ' + self.__stopCommand)
+
+        self.__stopCommand = escapeKey[0]
+        self.__stopLabel.setText('Start/Stop Command: ' + escapeKey[1])
 
     def start_stop(self):
         if self.__headInstruction == None: return #cannot run without instruction
@@ -143,7 +149,8 @@ class MainWindow(QWidget):
         if self.__running:
             self.__startStopButton.setStyleSheet(runningSS)
 
-            worker = Worker(self.run)  # Any other args, kwargs are passed to the run function
+            #Starts new thread
+            worker = Worker(self.run)
             self.__threadPool.start(worker)
 
         else:

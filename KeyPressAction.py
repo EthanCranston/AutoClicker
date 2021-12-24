@@ -12,7 +12,7 @@ class KeyPress(Instruction):
 
 
     def set_key(self, key):
-        self.__key = key
+        self.__key = key[1]
         self.update_title(f"Press {str(key)}") #From Instruction class
 
     def preform_action(self):
@@ -68,7 +68,7 @@ class KeyPressEditWindow(QWidget):
     def done_press(self):
         if self.__currentKey == None: return
 
-        self.__parent.set_key(self.currentKey_to_text())
+        self.__parent.set_key((self.__currentKey, self.currentKey_to_text()))
         self.close()
 
     def currentKey_to_text(self):
