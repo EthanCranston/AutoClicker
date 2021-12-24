@@ -3,6 +3,11 @@ from PyQt6.QtWidgets import *
 from ActionSelection import ActionSelection
 from KeyPressAction import KeyPressEditWindow
 from StyleSheets import *
+from Worker import Worker
+
+
+from PyQt6.QtGui import *
+from PyQt6.QtCore import *
 
 
 class MainWindow(QWidget):
@@ -12,6 +17,7 @@ class MainWindow(QWidget):
         self.setWindowTitle("Ethan's Auto Clicker")
 
         self.__running = False
+        self.__threadPool = QThreadPool()
 
         addButton = QPushButton("Add")
         addButton.clicked.connect(self.launch_action_selection)
@@ -136,8 +142,13 @@ class MainWindow(QWidget):
         self.__running = not self.__running
         if self.__running:
             self.__startStopButton.setStyleSheet(runningSS)
+
+            worker = Worker(self.run)  # Any other args, kwargs are passed to the run function
+            self.__threadPool.start(worker)
+
         else:
             self.__startStopButton.setStyleSheet('')
+            self.__threadPool.clear()
 
 
 
