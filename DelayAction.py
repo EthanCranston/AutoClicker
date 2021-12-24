@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import *
 
 class Delay(Instruction):
     def __init__(self, parent):
-        super(Delay, self).__init__("Click", parent)
+        super(Delay, self).__init__("Delay", parent)
         self.__time = 0
         self.__EditWindow = DelayEditWindow(self)
         self.__EditWindow.show()

@@ -1,34 +1,49 @@
 from abc import abstractmethod
 
+from PyQt6.QtCore import Qt
+#from PyQt6.QtGui import Qt
 from PyQt6.QtWidgets import *
+from StyleSheets import *
 
 
 
 class Instruction(QHBoxLayout):
     def __init__(self, title, parent):
         super(Instruction, self).__init__()
+        self.__frame = QWidget()
+        self.__frame.setStyleSheet("background-color: #99dbd225; border-radius: 10%;")
+        self.__frame.setMaximumHeight(50)
+
+        self.__mainBox = QHBoxLayout(self.__frame)
+
         self.__next = None
         self.__prev = None
         self.__parent = parent
 
-        self.__deleteButton = QPushButton("x")
+        self.__deleteButton = QPushButton("X")
+        self.__deleteButton.setStyleSheet(transparentSS)
         self.__deleteButton.clicked.connect(self.delete)
-        self.addWidget(self.__deleteButton)
+
+        self.__mainBox.addWidget(self.__deleteButton, alignment=Qt.AlignmentFlag.AlignLeft)
 
         self.__titleLabel = QLabel(title)
-        self.addWidget(self.__titleLabel)
+        self.__titleLabel.setStyleSheet(transparentSS)
+        self.__mainBox.addWidget(self.__titleLabel)
         self.__title = title
 
         self.__upButton = QPushButton("▲")
+        self.__upButton.setStyleSheet(transparentSS)
         self.__upButton.clicked.connect(self.shift_up)
         self.__downButton = QPushButton("▼")
+        self.__downButton.setStyleSheet(transparentSS)
         self.__downButton.clicked.connect(self.shift_down)
 
         buttonBox = QVBoxLayout()
-        buttonBox.addWidget(self.__upButton)
-        buttonBox.addWidget(self.__downButton)
+        buttonBox.addWidget(self.__upButton, alignment=Qt.AlignmentFlag.AlignRight)
+        buttonBox.addWidget(self.__downButton, alignment=Qt.AlignmentFlag.AlignRight)
 
-        self.addLayout(buttonBox)
+        self.__mainBox.addLayout(buttonBox)
+        self.addWidget(self.__frame)
 
 
     def set_next(self, next):
@@ -86,14 +101,8 @@ class Instruction(QHBoxLayout):
         if self.next() != None: self.next().set_prev(self.prev())
 
         self.__parent.update_elements()
-        self.hide()
+        self.__frame.hide()
 
-
-    def hide(self):
-        self.__deleteButton.hide()
-        self.__titleLabel.hide()
-        self.__downButton.hide()
-        self.__upButton.hide()
 
     @abstractmethod
     def preform_action(self):

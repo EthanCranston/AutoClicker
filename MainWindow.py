@@ -1,12 +1,15 @@
 from PyQt6.QtWidgets import *
 from ActionSelection import ActionSelection
 from KeyPressAction import KeyPressEditWindow
+from StyleSheets import *
+
 
 class MainWindow(QWidget):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.__headInstruction = None
         self.setWindowTitle("Ethan's Auto Clicker")
+        self.setMinimumHeight(250)
 
         addButton = QPushButton("Add")
         addButton.clicked.connect(self.launch_action_selection)
@@ -27,6 +30,8 @@ class MainWindow(QWidget):
         stopBox.addWidget(stopEditButton)
         self.__instructionBox = QVBoxLayout()
 
+
+
         mainBox = QVBoxLayout()
 
         mainBox.addLayout(self.__instructionBox)
@@ -35,6 +40,10 @@ class MainWindow(QWidget):
 
         self.setLayout(mainBox)
 
+
+
+
+        self.setPalette(gradientPalette)
 
         self.update_elements()
         self.show()
