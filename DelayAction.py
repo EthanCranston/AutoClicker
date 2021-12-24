@@ -1,5 +1,6 @@
 from Instruction import Instruction
 from PyQt6.QtWidgets import *
+from StyleSheets import *
 
 
 class Delay(Instruction):
@@ -22,7 +23,11 @@ class DelayEditWindow(QWidget):
         self.__parent = parent
         self.setWindowTitle("Edit Delay")
 
-        instruction = QLabel("Enter delay in milliseconds.")
+        instruction = QLabel("  Enter delay in milliseconds.  ")
+        instruction.setFont(mainFont)
+        instruction.setStyleSheet(settingsCardBackgroundSS)
+        instruction.setMinimumHeight(25)
+
         self.__delayBox = QLineEdit()
         doneButton = QPushButton("Done")
         doneButton.clicked.connect(self.done_press)
@@ -32,6 +37,7 @@ class DelayEditWindow(QWidget):
         mainBox.addWidget(self.__delayBox)
         mainBox.addWidget(doneButton)
 
+        self.setPalette(gradientPalette2)
         self.setLayout(mainBox)
 
     def done_press(self):

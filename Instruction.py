@@ -8,11 +8,12 @@ from StyleSheets import *
 
 
 class Instruction(QHBoxLayout):
-    def __init__(self, title, parent):
+    def __init__(self, title, parent,):
         super(Instruction, self).__init__()
         self.__frame = QWidget()
-        self.__frame.setStyleSheet("background-color: #99dbd225; border-radius: 10%;")
-        self.__frame.setMaximumHeight(50)
+        self.__frame.setStyleSheet(mainCardBackgroundSS)
+        self.__frame.setMaximumHeight(60)
+        self.__frame.setMinimumHeight(40)
 
         self.__mainBox = QHBoxLayout(self.__frame)
 

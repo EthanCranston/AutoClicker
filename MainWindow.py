@@ -1,3 +1,4 @@
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import *
 from ActionSelection import ActionSelection
 from KeyPressAction import KeyPressEditWindow
@@ -9,25 +10,34 @@ class MainWindow(QWidget):
         super(MainWindow, self).__init__()
         self.__headInstruction = None
         self.setWindowTitle("Ethan's Auto Clicker")
-        self.setMinimumHeight(250)
+
+        self.__running = False
 
         addButton = QPushButton("Add")
         addButton.clicked.connect(self.launch_action_selection)
 
-        runButton = QPushButton("Run")
-        runButton.clicked.connect(self.run)
+        self.__startStopButton = QPushButton("Start/Stop")
+        self.__startStopButton.clicked.connect(self.start_stop)
 
         buttonBox = QHBoxLayout()
-        buttonBox.addWidget(runButton)
+        buttonBox.addWidget(self.__startStopButton)
         buttonBox.addWidget(addButton)
 
         self.__stopCommand = 'Escape'
-        self.__stopLabel = QLabel('Stop command: ' + self.__stopCommand)
+        self.__stopLabel = QLabel('Start/Stop Command: ' + self.__stopCommand)
+        self.__stopLabel.setFont(mainFont)
+        self.__stopLabel.setStyleSheet(transparentSS)
         stopEditButton = QPushButton("Edit")
         stopEditButton.clicked.connect(self.change_stop_key)
-        stopBox = QHBoxLayout()
+        stopEditButton.setStyleSheet(transparentSS)
+
+        stopFrame = QWidget()
+        stopFrame.setStyleSheet(settingsCardBackgroundSS)
+        stopFrame.setMaximumHeight(50)
+        stopBox = QVBoxLayout(stopFrame)
+        stopBox.addWidget(stopEditButton, alignment= Qt.AlignmentFlag.AlignLeft)
         stopBox.addWidget(self.__stopLabel)
-        stopBox.addWidget(stopEditButton)
+
         self.__instructionBox = QVBoxLayout()
 
 
@@ -36,14 +46,12 @@ class MainWindow(QWidget):
 
         mainBox.addLayout(self.__instructionBox)
         mainBox.addLayout(buttonBox)
-        mainBox.addLayout(stopBox)
+        mainBox.addWidget(stopFrame)
 
         self.setLayout(mainBox)
 
 
-
-
-        self.setPalette(gradientPalette)
+        self.setPalette(gradientPalette1)
 
         self.update_elements()
         self.show()
@@ -57,6 +65,7 @@ class MainWindow(QWidget):
 
     def update_elements(self):
         self.update_head()
+        self.setMinimumHeight(40 * self.count_instruction() + 130)
         currentInstruction = self.__headInstruction
 
 
@@ -65,7 +74,13 @@ class MainWindow(QWidget):
             self.__instructionBox.addLayout(currentInstruction)
             currentInstruction = currentInstruction.next()
 
-
+    def count_instruction(self):
+        currentInstruction = self.__headInstruction
+        count = 0
+        while currentInstruction != None:
+            currentInstruction = currentInstruction.next()
+            count += 1
+        return count
 
     def add_instruction(self, insruction):
         if self.__headInstruction == None:
@@ -97,11 +112,16 @@ class MainWindow(QWidget):
             self.__instructionBox.removeItem(current)
 
     def launch_action_selection(self):
-        self.selector = ActionSelection(self)
+        self.selector = ActionSelection(self, self.size()*0.8)
         self.selector.show()
 
     def run(self):
-        pass
+        currentInstruction = None
+        while self.__running:
+            if currentInstruction == None:
+                currentInstruction = self.__headInstruction
+            currentInstruction.preform_action()
+            currentInstruction = currentInstruction.next()
 
     def change_stop_key(self):
         self.__escapeEditWindow = KeyPressEditWindow(self) #Uses this window because it is the same
@@ -110,6 +130,14 @@ class MainWindow(QWidget):
     def set_key(self, escapeKey): #Made to match function from KeyPressAction
         self.__stopCommand = escapeKey
         self.__stopLabel.setText('Stop command: ' + self.__stopCommand)
+
+    def start_stop(self):
+        if self.__headInstruction == None: return #cannot run without instruction
+        self.__running = not self.__running
+        if self.__running:
+            self.__startStopButton.setStyleSheet(runningSS)
+        else:
+            self.__startStopButton.setStyleSheet('')
 
 
 

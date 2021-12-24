@@ -1,6 +1,7 @@
 from Instruction import Instruction
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt
+from StyleSheets import *
 
 class KeyPress(Instruction):
     def __init__(self, parent):
@@ -25,8 +26,12 @@ class KeyPressEditWindow(QWidget):
         self.setWindowTitle("Edit Key Press")
         self.__currentKey = None
 
-        instruction = QLabel("Press which key you would like to use.")
-        self.__currentKeyLabel = QLabel("None")
+        instruction = QLabel("  Press which key you would like to use.  ")
+        instruction.setFont(mainFont)
+        instruction.setStyleSheet(settingsCardBackgroundSS)
+        instruction.setMinimumHeight(25)
+        self.__currentKeyLabel = QLineEdit("None")
+        self.__currentKeyLabel.setReadOnly(True)
         doneButton = QPushButton("Done")
         doneButton.clicked.connect(self.done_press)
 
@@ -35,6 +40,7 @@ class KeyPressEditWindow(QWidget):
         mainBox.addWidget(self.__currentKeyLabel)
         mainBox.addWidget(doneButton)
 
+        self.setPalette(gradientPalette2)
         self.setLayout(mainBox)
 
         self.__keymap = {}

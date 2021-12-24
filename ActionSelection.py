@@ -2,12 +2,14 @@ from PyQt6.QtWidgets import *
 from ClickAction import Click
 from KeyPressAction import KeyPress
 from DelayAction import Delay
+from StyleSheets import *
 
 class ActionSelection(QWidget):
-    def __init__(self, parent):
+    def __init__(self, parent, size):
         super(ActionSelection, self).__init__()
         self.__parent = parent
         self.setWindowTitle("Select Action")
+        self.resize(size)
 
         actions = {'Click': Click, 'Key Press': KeyPress, 'Delay': Delay}
 
@@ -18,6 +20,7 @@ class ActionSelection(QWidget):
             newButton.clicked.connect(newFunc)
             mainBox.addWidget(newButton)
 
+        self.setPalette(gradientPalette2)
         self.setLayout(mainBox)
 
         def addActionFromSelection(sender):
