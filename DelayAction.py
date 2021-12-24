@@ -2,6 +2,7 @@ from Instruction import Instruction
 from PyQt6.QtWidgets import *
 from StyleSheets import *
 
+import time as tm
 
 class Delay(Instruction):
     def __init__(self, parent):
@@ -11,11 +12,12 @@ class Delay(Instruction):
         self.__EditWindow.show()
 
     def preform_action(self):
-        print("Delayed")
+        print('delay')
+        tm.sleep(self.__time) -
 
     def set_time(self, newTime):
-        self.__time = int(newTime)
-        self.update_title(f"Delay {str(newTime)}ms")  # From Instruction class
+        self.__time = float(newTime)
+        self.update_title(f"Delay {str(newTime)}s")  # From Instruction class
 
 class DelayEditWindow(QWidget):
     def __init__(self, parent):
@@ -23,7 +25,7 @@ class DelayEditWindow(QWidget):
         self.__parent = parent
         self.setWindowTitle("Edit Delay")
 
-        instruction = QLabel("  Enter delay in milliseconds.  ")
+        instruction = QLabel("  Enter delay in seconds.  ")
         instruction.setFont(mainFont)
         instruction.setStyleSheet(settingsCardBackgroundSS)
         instruction.setMinimumHeight(25)
@@ -41,6 +43,6 @@ class DelayEditWindow(QWidget):
         self.setLayout(mainBox)
 
     def done_press(self):
-        if self.__delayBox.text() == '' or not self.__delayBox.text().isdigit(): return
+        if self.__delayBox.text() == '' or not self.__delayBox.text().replace('.','').isdigit(): return
         self.__parent.set_time(self.__delayBox.text())
         self.close()

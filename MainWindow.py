@@ -9,6 +9,8 @@ from Worker import Worker
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
 
+from pynput import keyboard
+
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -30,18 +32,18 @@ class MainWindow(QWidget):
         buttonBox.addWidget(addButton)
 
         self.__stopCommand = [Qt.Key.Key_Escape, Qt.KeyboardModifier.NoModifier]
-        self.__stopLabel = QLabel('Start/Stop Command: Escape')
+        self.__stopLabel = QLabel('Start/Stop Command: Esc')
         self.__stopLabel.setFont(mainFont)
         self.__stopLabel.setStyleSheet(transparentSS)
-        stopEditButton = QPushButton("Edit")
-        stopEditButton.clicked.connect(self.change_stop_key)
-        stopEditButton.setStyleSheet(transparentSS)
+        #stopEditButton = QPushButton("Edit")
+        #stopEditButton.clicked.connect(self.change_stop_key)
+        #stopEditButton.setStyleSheet(transparentSS)
 
         stopFrame = QWidget()
         stopFrame.setStyleSheet(settingsCardBackgroundSS)
         stopFrame.setMaximumHeight(50)
         stopBox = QVBoxLayout(stopFrame)
-        stopBox.addWidget(stopEditButton, alignment= Qt.AlignmentFlag.AlignLeft)
+        #stopBox.addWidget(stopEditButton, alignment= Qt.AlignmentFlag.AlignLeft)
         stopBox.addWidget(self.__stopLabel)
 
         self.__instructionBox = QVBoxLayout()
@@ -63,10 +65,17 @@ class MainWindow(QWidget):
         self.show()
 
     def keyPressEvent(self, event): #For start/stop key
+        '''
         keyPressed = [event.key(), event.modifiers()]
         if self.__stopCommand == keyPressed:
             self.start_stop()
+        '''
+        if event == keyboard.Key.esc:
+            self.start_stop()
 
+
+    def key_press(self, key):
+        self.keyPressEvent(key)
 
     def update_head(self):
 
@@ -75,6 +84,9 @@ class MainWindow(QWidget):
             self.__headInstruction = self.__headInstruction.prev()
 
     def update_elements(self):
+        if self.__running: #Stops program if it is running
+            self.start_stop()
+
         self.update_head()
         self.setMinimumHeight(40 * self.count_instruction() + 130)
         currentInstruction = self.__headInstruction
