@@ -13,7 +13,7 @@ class Delay(Instruction):
 
     def preform_action(self):
         print('delay')
-        tm.sleep(self.__time) -
+        tm.sleep(self.__time)
 
     def set_time(self, newTime):
         self.__time = float(newTime)

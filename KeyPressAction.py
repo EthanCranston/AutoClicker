@@ -3,12 +3,15 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt
 from StyleSheets import *
 
+from pynput.keyboard import Key, Controller
+
 class KeyPress(Instruction):
     def __init__(self, parent):
         super(KeyPress, self).__init__("Press Key", parent)
         self.__key = None
         self.__EditWindow = KeyPressEditWindow(self)
         self.__EditWindow.show()
+        self.__keyboard = Controller()
 
 
     def set_key(self, key):
