@@ -3,6 +3,7 @@ from LeftClickAction import LeftClick
 from RightClickAction import RightClick
 from KeyPressAction import KeyPress
 from DelayAction import Delay
+from MicroDelayAction import MicroDelay
 from MoveMouseAction import MoveMouse
 from StyleSheets import *
 
@@ -13,8 +14,8 @@ class ActionSelection(QWidget):
         self.setWindowTitle("Select Action")
         self.resize(size)
 
-        actions = {'Left Click': LeftClick, 'Right Click': RightClick, 'Key Press': KeyPress, 'Delay': Delay,
-                   'Move Mouse': MoveMouse}
+        actions = {'Left Click': LeftClick, 'Right Click': RightClick, 'Key Press': KeyPress, 'Move Mouse': MoveMouse,
+                   'Delay': Delay, 'Micro Delay': MicroDelay}
 
         mainBox = QVBoxLayout()
         for action in actions.items():

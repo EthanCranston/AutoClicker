@@ -2,21 +2,23 @@ from Instruction import Instruction
 from PyQt6.QtWidgets import *
 from StyleSheets import *
 
-import time as tm
-
-class Delay(Instruction):
+class MicroDelay(Instruction):
     def __init__(self, parent):
-        super(Delay, self).__init__("Delay", parent)
+        super(MicroDelay, self).__init__("Delay", parent)
         self.__time = 0
         self.__EditWindow = DelayEditWindow(self)
         self.__EditWindow.show()
 
     def preform_action(self):
-        tm.sleep(self.__time)
+        counter = 0
+        for x in range(self.__time):
+            for i in range(self.__time):
+                counter += 1
+
 
     def set_time(self, newTime):
-        self.__time = float(newTime)
-        self.update_title(f"Delay {str(newTime)}s")  # From Instruction class
+        self.__time = int(float(newTime))
+        self.update_title(f"Micro Delay {str(newTime)}")  # From Instruction class
 
 class DelayEditWindow(QWidget):
     def __init__(self, parent):
@@ -24,7 +26,7 @@ class DelayEditWindow(QWidget):
         self.__parent = parent
         self.setWindowTitle("Edit Delay")
 
-        instruction = QLabel("  Enter delay in seconds.  ")
+        instruction = QLabel("  Micro Delay is Unitless  ")
         instruction.setFont(mainFont)
         instruction.setStyleSheet(settingsCardBackgroundSS)
         instruction.setMinimumHeight(25)
