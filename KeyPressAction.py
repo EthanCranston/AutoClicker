@@ -2,6 +2,7 @@ from Instruction import Instruction
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt
 from StyleSheets import *
+import keyboard
 
 from pynput.keyboard import Key, Controller
 
@@ -15,10 +16,14 @@ class KeyPress(Instruction):
 
 
     def set_key(self, key):
-        self.__key = key[1]
-        self.update_title(f"Press {str(key)}") #From Instruction class
+        self.__key = key[0]
+        print(self.__key)
+        self.update_title(f"Press {str(key[1])}") #From Instruction class
 
     def preform_action(self):
+        #self.__key[0].
+        #QWidget.userInputSignal.emit('A')
+        #Qt.Key.Key_A.emit()
         print("Key Pressed:", self.__key)
 
 
